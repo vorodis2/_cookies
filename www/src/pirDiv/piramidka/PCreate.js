@@ -50,28 +50,5 @@ export class PCreate {
       pos: [0, 3.16,-1],
       move: true, density: 1, friction: 0.6, restitution: 0.05
     });
-    this.addBlock({
-      color: 0x655c50,
-      array: [
-        { type: 'box', size: [18, 18, 6] }
-      ],
-      // Keep the lower end of the upper surface embedded in the ground.
-      pos: [-16, -0.6 + 9 * Math.sin(20 * Math.PI / 180) - Math.cos(20 * Math.PI / 180)-7, 0],
-      rot: [0, 0, -18], move: false, friction: 0.6, restitution: 0.05
-    });
-
-
-
-    const radius = 0.6;
-    this.par.ball = this.addBlock({
-      color: 0xf4f6fa,
-      mirror: true,
-      array: [
-        { type: 'sphere', size: [radius] }
-      ],
-      pos: [-20.4, 6.7, 0],
-      move: true, density: 25, friction: 0.6, restitution: 0.05
-    }).content3D;
-
   }
 }

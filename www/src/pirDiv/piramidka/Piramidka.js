@@ -104,6 +104,50 @@ export class Piramidka {
     return this._blockEventActive;
   }
 
+  addCookies() {
+    const source = new URL('../../../resources/models/test_1.glb', import.meta.url).href;
+    const arrCookies = this.arrBlock.filter((block) =>
+      block.source === source && block.boolLoad && !block.splitMeshes && !block.loadError);
+    if (!arrCookies.length || this.loading) return;
+    this.beginLoading();
+    const top = this.arrBlock.reduce((height, block) => {
+      if (!block.content3D) return height;
+      return Math.max(height, new THREE.Box3().setFromObject(block.content3D).max.y);
+    }, 0);
+    for (let i = 0; i < 5; i++) {
+      const template = arrCookies[Math.floor(Math.random() * arrCookies.length)];
+      const cloneObject = (object) => {
+        const cloneMaterial = (material) => {
+          const clone = material.clone();
+          for (const key of Object.keys(clone)) {
+            if (clone[key]?.isTexture) clone[key] = clone[key].clone();
+          }
+          return clone;
+        };
+        const clone = object.isMesh
+          ? new THREE.Mesh(object.geometry.clone(), Array.isArray(object.material)
+            ? object.material.map(cloneMaterial) : cloneMaterial(object.material))
+          : new THREE.Group();
+        clone.name = object.name;
+        clone.position.copy(object.position);
+        clone.quaternion.copy(object.quaternion);
+        clone.scale.copy(object.scale);
+        for (const child of object.children) clone.add(cloneObject(child));
+        return clone;
+      };
+      const model = cloneObject(template.modelObject);
+      const angle = i * Math.PI * 2 / 5;
+      this.addBlock({
+        object3D: { src: source, model },
+        color: template.shape.color,
+        array: [{ type: 'model', size: [...template.shape.arrShapes[0].size], parts: 1 }],
+        pos: [Math.cos(angle) * 1.8, top + 1.5 + i * 0.35, Math.sin(angle) * 1.8],
+        rot: [0, Math.random() * 360, 0],
+        move: true, density: 1, friction: 0.6, restitution: 0.05
+      });
+    }
+  }
+
   get debugPhysics() {
     return this._debugPhysics;
   }
@@ -115,6 +159,7 @@ export class Piramidka {
     window.localStorage.setItem('debugPhysics', String(active));
     for (const block of this.arrBlock) block.visuPhysics.active = active;
     this.par.menu?.menuDebager.menuD1.updateDebugPhysicsButton(active);
+    this.par.menu?.updateDebugPhysicsButton(active);
   }
 
   set blockEventActive(value) {

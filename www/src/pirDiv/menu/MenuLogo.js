@@ -48,7 +48,16 @@ export class MenuLogo {
       },
       contact('website', 'https://vorodis2.com', 'vorodis2.com'),
       contact('email', 'mailto:vorodis2@gmail.com', 'vorodis2@gmail.com'),
-      contact('phone', 'tel:+380951026557', '+380951026557')
+      contact('phone', 'tel:+380951026557', '+380951026557'),
+      createElement('p', {
+        style: {
+          gridColumn: '1 / -1',
+          minWidth: 0,
+          margin: 0,
+          whiteSpace: 'normal',
+          overflowWrap: 'anywhere'
+        }
+      }, 'Looking for work in physics, AI & 3D. Available as of November 11, 2026. $25/hour or $3,000/month.')
     ));
   }
 }

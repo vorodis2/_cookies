@@ -5,7 +5,7 @@ import { Param } from './components/Param.js';
 export class Main {
   constructor() {
     this.param = new Param().param;
-    document.title = `Pyramid V${this.param.version_reliz}.${this.param.version_dev}`;
+    document.title = 'Cookies';
     window.param = this.param;
     this.param.otstup=4
     this.localStorage = new LocalStorage(null, 'pirDiv.v4');
